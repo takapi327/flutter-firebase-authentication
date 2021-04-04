@@ -37,9 +37,11 @@ class MyAuthPage extends StatefulWidget {
 }
 
 class _MyAuthPageState extends State<MyAuthPage> {
-  String newUserEmail    = "";
-  String newUserPassword = "";
-  String infoText        = "";
+  String newUserEmail      = "";
+  String newUserPassword   = "";
+  String infoText          = "";
+  String loginUserEmail    = "";
+  String loginUserPassword = "";
 
   @override
   Widget build(BuildContext context) {
@@ -50,67 +52,110 @@ class _MyAuthPageState extends State<MyAuthPage> {
         title: Text('Flutter Firebase Sign up Demo Home Page'),
       ),
       body: Center(
-        child: Column(
-          children: [
-            TextFormField(
-              decoration: InputDecoration(labelText: "メールアドレス"),
-              onChanged: (String value) {
-                setState(() {
-                  newUserEmail = value;
-                });
-              },
-            ),
-            const SizedBox(height: 8),
-            TextFormField(
-              decoration: InputDecoration(labelText: "パスワード(6文字以上)"),
-              obscureText: true,
-              onChanged: (String value) {
-                setState(() {
-                  newUserPassword = value;
-                });
-              },
-            ),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: () async {
-                try {
-                  final FirebaseAuth auth = FirebaseAuth.instance;
-                  final UserCredential result = await auth.createUserWithEmailAndPassword(
-                    email:    newUserEmail,
-                    password: newUserPassword
-                  );
+        child: Container(
+          padding: EdgeInsets.all(32),
+          child: Column(
+            children: [
+              TextFormField(
+                decoration: InputDecoration(labelText: "メールアドレス"),
+                onChanged: (String value) {
+                  setState(() {
+                    newUserEmail = value;
+                  });
+                },
+              ),
+              const SizedBox(height: 8),
+              TextFormField(
+                decoration: InputDecoration(labelText: "パスワード(6文字以上)"),
+                obscureText: true,
+                onChanged: (String value) {
+                  setState(() {
+                    newUserPassword = value;
+                  });
+                },
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    final FirebaseAuth auth = FirebaseAuth.instance;
+                    final UserCredential result = await auth.createUserWithEmailAndPassword(
+                        email:    newUserEmail,
+                        password: newUserPassword
+                    );
 
-                  final User user = result.user!;
+                    final User user = result.user!;
+                    setState(() {
+                      infoText = "登録OK:${user.toString()}";
+                    });
+                  } catch (e) {
+                    setState(() {
+                      infoText = "登録NG:${e.toString()}";
+                    });
+                  }
+                },
+                child: Text("ユーザー登録"),
+              ),
+              const SizedBox(height: 32),
+              TextFormField(
+                decoration: InputDecoration(labelText: "メールアドレス"),
+                onChanged: (String value) {
                   setState(() {
-                    infoText = "登録OK:${user.toString()}";
+                    loginUserEmail = value;
                   });
-                } catch (e) {
+                },
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: "パスワード"),
+                onChanged: (String value) {
                   setState(() {
-                    infoText = "登録NG:${e.toString()}";
+                    loginUserPassword = value;
                   });
-                }
-              },
-              child: Text("ユーザー登録"),
-            ),
-            const SizedBox(height: 8),
-            Text(infoText),
-            ElevatedButton(
-              onPressed: () async {
-                try {
-                  final FirebaseAuth auth = FirebaseAuth.instance;
-                  await auth.signOut();
-                  setState(() {
-                    infoText = "ログアウト成功";
-                  });
-                } catch (e) {
-                  setState(() {
-                    infoText = "ログアウト失敗:${e.toString()}";
-                  });
-                }
-              },
-              child: Text("ログアウト"),
-            ),
-          ],
+                },
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    final FirebaseAuth auth = FirebaseAuth.instance;
+                    final UserCredential result = await auth.signInWithEmailAndPassword(
+                      email:    loginUserEmail,
+                      password: loginUserPassword
+                    );
+
+                    final User user = result.user!;
+                    setState(() {
+                      infoText = "ログインOK:${user.toString()}";
+                    });
+                  } catch (e) {
+                    setState(() {
+                      infoText = "ログインNG:${e.toString()}";
+                    });
+                  }
+                },
+                child: Text("ログイン")
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    final FirebaseAuth auth = FirebaseAuth.instance;
+                    await auth.signOut();
+                    setState(() {
+                      infoText = "ログアウト成功";
+                    });
+                  } catch (e) {
+                    setState(() {
+                      infoText = "ログアウト失敗:${e.toString()}";
+                    });
+                  }
+                },
+                child: Text("ログアウト"),
+              ),
+              const SizedBox(height: 8),
+              Text(infoText),
+            ],
+          ),
         ),
       ),
     );
