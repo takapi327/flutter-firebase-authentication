@@ -93,7 +93,23 @@ class _MyAuthPageState extends State<MyAuthPage> {
               child: Text("ユーザー登録"),
             ),
             const SizedBox(height: 8),
-            Text(infoText)
+            Text(infoText),
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  final FirebaseAuth auth = FirebaseAuth.instance;
+                  await auth.signOut();
+                  setState(() {
+                    infoText = "ログアウト成功";
+                  });
+                } catch (e) {
+                  setState(() {
+                    infoText = "ログアウト失敗:${e.toString()}";
+                  });
+                }
+              },
+              child: Text("ログアウト"),
+            ),
           ],
         ),
       ),
