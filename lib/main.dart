@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 
 import "overlay_loading_molecules.dart";
+
+import 'package:flutter_firebase_authentication/mvc/state/auth_store.dart';
+import 'auth/signup.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => AuthStore()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -39,15 +50,45 @@ class MyAuthPage extends StatefulWidget {
 }
 
 class _MyAuthPageState extends State<MyAuthPage> {
-  String newUserEmail      = "";
-  String newUserPassword   = "";
-  String infoText          = "";
-  String loginUserEmail    = "";
-  String loginUserPassword = "";
-  bool   isLoading         = false;
+  //String newUserEmail      = "";
+  //String newUserPassword   = "";
+  //String infoText          = "";
+  //String loginUserEmail    = "";
+  //String loginUserPassword = "";
+  //bool   isLoading         = false;
 
   @override
   Widget build(BuildContext context) {
+    return Consumer <AuthStore>(
+      builder: (context, authStore, _) {
+        return Scaffold(
+          appBar: AppBar(
+            // Here we take the value from the MyHomePage object that was created by
+            // the App.build method, and use it to set our appbar title.
+            title: Text('Flutter Firebase Sign up Demo Home Page'),
+          ),
+          body: ClipRect(
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(32),
+                  child: Column(
+                    children: [
+                      FirebaseAuthSignUp(),
+                      const SizedBox(height: 8),
+                      Text(authStore.infoText),
+                    ],
+                  ),
+                ),
+                OverlayLoadingMolecules(visible: authStore.isLoading)
+              ],
+            ),
+          ),
+        );
+      },
+    );
+        /*
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -62,6 +103,7 @@ class _MyAuthPageState extends State<MyAuthPage> {
               padding: EdgeInsets.all(32),
               child: Column(
                 children: [
+                  FirebaseAuthSignUp(),
                   TextFormField(
                     decoration: InputDecoration(labelText: "メールアドレス"),
                     onChanged: (String value) {
@@ -183,5 +225,6 @@ class _MyAuthPageState extends State<MyAuthPage> {
         ),
       ),
     );
+         */
   }
 }

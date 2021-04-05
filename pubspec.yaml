@@ -36,6 +36,8 @@ dependencies:
   # For example, to use Firebase Authentication
   firebase_auth: ^1.0.1
 
+  provider: ^5.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
