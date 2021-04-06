@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_firebase_authentication/auth/login.dart';
 import 'package:flutter_firebase_authentication/auth/signup.dart';
 import 'package:provider/provider.dart';
 
-//import "overlay_loading_molecules.dart";
-
 import 'package:flutter_firebase_authentication/mvc/state/auth_store.dart';
-//import 'auth/signup.dart';
 import 'auth/auth_page.dart';
 
 Future<void> main() async {
@@ -30,30 +27,21 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
       initialRoute: '/',
       routes: {
-        '/':            (context) => MyAuthPage(),
+        '/':            (context) => TopPage(),
         '/auth':        (context) => AuthPage(),
         '/auth/signup': (context) => FirebaseAuthSignUp(),
-        '/auth/login':  (context) => FirebaseAuthSignUp(),
+        '/auth/login':  (context) => FirebaseAuthLogIn(),
+        //'/mypage':      (context) => MyPage(),
       },
-      //home: MyAuthPage(),
     );
   }
 }
 
-class MyAuthPage extends StatelessWidget {
+class TopPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -106,50 +94,6 @@ class MyAuthPage extends StatelessWidget {
               padding: EdgeInsets.all(32),
               child: Column(
                 children: [
-                  TextFormField(
-                    decoration: InputDecoration(labelText: "メールアドレス"),
-                    onChanged: (String value) {
-                      setState(() {
-                        loginUserEmail = value;
-                      });
-                    },
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(labelText: "パスワード"),
-                    onChanged: (String value) {
-                      setState(() {
-                        loginUserPassword = value;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  ElevatedButton(
-                    onPressed: () async {
-                      try {
-                        setState(() {
-                          isLoading = true;
-                        });
-                        final FirebaseAuth auth = FirebaseAuth.instance;
-                        final UserCredential result = await auth.signInWithEmailAndPassword(
-                            email:    loginUserEmail,
-                            password: loginUserPassword
-                        );
-
-                        final User user = result.user!;
-                        setState(() {
-                          infoText  = "ログインOK:${user.toString()}";
-                          isLoading = false;
-                        });
-                      } catch (e) {
-                        setState(() {
-                          infoText  = "ログインNG:${e.toString()}";
-                          isLoading = false;
-                        });
-                      }
-                    },
-                    child: Text("ログイン")
-                  ),
-                  const SizedBox(height: 32),
                   ElevatedButton(
                     onPressed: () async {
                       try {

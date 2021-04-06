@@ -8,6 +8,8 @@ class AuthStore extends ChangeNotifier {
   String infoText     = "";
   bool   isLoading    = false;
 
+  late User user;
+
   void changeLoading(bool loading) {
     isLoading = loading;
     notifyListeners();
@@ -28,9 +30,22 @@ class AuthStore extends ChangeNotifier {
     notifyListeners();
   }
 
+  void authentication(User user) {
+    user = user;
+    notifyListeners();
+  }
+
   Future<UserCredential> signUp() {
-    final FirebaseAuth auth = FirebaseAuth.instance;
+    final  FirebaseAuth auth = FirebaseAuth.instance;
     return auth.createUserWithEmailAndPassword(
+        email:    userEmail,
+        password: userPassword
+    );
+  }
+
+  Future<UserCredential> login() {
+    final  FirebaseAuth auth = FirebaseAuth.instance;
+    return auth.signInWithEmailAndPassword(
         email:    userEmail,
         password: userPassword
     );

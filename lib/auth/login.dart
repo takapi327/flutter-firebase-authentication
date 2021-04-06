@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:flutter_firebase_authentication/mvc/state/auth_store.dart';
 
-class FirebaseAuthSignUp extends StatelessWidget {
+class FirebaseAuthLogIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class FirebaseAuthSignUp extends StatelessWidget {
       builder: (context, authStore, _) {
         return Scaffold(
           appBar: AppBar(
-            title: Text('ユーザー登録'),
+            title: Text('ログイン'),
           ),
           body: Padding(
             padding: const EdgeInsets.all(32),
@@ -39,18 +39,18 @@ class FirebaseAuthSignUp extends StatelessWidget {
                     onPressed: () async {
                       try {
                         authStore.changeLoading(true);
-                        final UserCredential result = await authStore.signUp();
+                        final UserCredential result = await authStore.login();
 
                         final User user = result.user!;
-                        authStore.changeInfoText("登録OK:${user.toString()}");
+                        authStore.changeInfoText("ログインOK:${user.toString()}");
                         authStore.authentication(user);
                         authStore.changeLoading(false);
                       } catch (e) {
-                        authStore.changeInfoText("登録NG:${e.toString()}");
+                        authStore.changeInfoText("ログインNG:${e.toString()}");
                         authStore.changeLoading(false);
                       }
                     },
-                    child: Text("ユーザー登録"),
+                    child: Text("ログイン"),
                   ),
                 ],
               ),
