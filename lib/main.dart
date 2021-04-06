@@ -44,18 +44,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyAuthPage extends StatefulWidget {
-  @override
-  _MyAuthPageState createState() => _MyAuthPageState();
-}
-
-class _MyAuthPageState extends State<MyAuthPage> {
-  //String newUserEmail      = "";
-  //String newUserPassword   = "";
-  //String infoText          = "";
-  //String loginUserEmail    = "";
-  //String loginUserPassword = "";
-  //bool   isLoading         = false;
+class MyAuthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
