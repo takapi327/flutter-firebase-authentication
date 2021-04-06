@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_firebase_authentication/auth/signup.dart';
 import 'package:provider/provider.dart';
 
-import "overlay_loading_molecules.dart";
+//import "overlay_loading_molecules.dart";
 
 import 'package:flutter_firebase_authentication/mvc/state/auth_store.dart';
-import 'auth/signup.dart';
+//import 'auth/signup.dart';
+import 'auth/auth_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +41,14 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyAuthPage(),
+      initialRoute: '/',
+      routes: {
+        '/':            (context) => MyAuthPage(),
+        '/auth':        (context) => AuthPage(),
+        '/auth/signup': (context) => FirebaseAuthSignUp(),
+        '/auth/login':  (context) => FirebaseAuthSignUp(),
+      },
+      //home: MyAuthPage(),
     );
   }
 }
@@ -55,6 +64,14 @@ class MyAuthPage extends StatelessWidget {
             // Here we take the value from the MyHomePage object that was created by
             // the App.build method, and use it to set our appbar title.
             title: Text('Flutter Firebase Sign up Demo Home Page'),
+            actions: [
+              IconButton(
+                icon:      Icon(Icons.account_circle_sharp),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/auth');
+                }
+              ),
+            ],
           ),
           body: ClipRect(
             child: Stack(
@@ -64,13 +81,10 @@ class MyAuthPage extends StatelessWidget {
                   padding: EdgeInsets.all(32),
                   child: Column(
                     children: [
-                      FirebaseAuthSignUp(),
-                      const SizedBox(height: 8),
-                      Text(authStore.infoText),
+                      Text('test'),
                     ],
                   ),
                 ),
-                OverlayLoadingMolecules(visible: authStore.isLoading)
               ],
             ),
           ),
@@ -92,53 +106,6 @@ class MyAuthPage extends StatelessWidget {
               padding: EdgeInsets.all(32),
               child: Column(
                 children: [
-                  FirebaseAuthSignUp(),
-                  TextFormField(
-                    decoration: InputDecoration(labelText: "メールアドレス"),
-                    onChanged: (String value) {
-                      setState(() {
-                        newUserEmail = value;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    decoration: InputDecoration(labelText: "パスワード(6文字以上)"),
-                    obscureText: true,
-                    onChanged: (String value) {
-                      setState(() {
-                        newUserPassword = value;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  ElevatedButton(
-                    onPressed: () async {
-                      try {
-                        setState(() {
-                          isLoading = true;
-                        });
-                        final FirebaseAuth auth = FirebaseAuth.instance;
-                        final UserCredential result = await auth.createUserWithEmailAndPassword(
-                            email:    newUserEmail,
-                            password: newUserPassword
-                        );
-
-                        final User user = result.user!;
-                        setState(() {
-                          infoText  = "登録OK:${user.toString()}";
-                          isLoading = false;
-                        });
-                      } catch (e) {
-                        setState(() {
-                          infoText  = "登録NG:${e.toString()}";
-                          isLoading = false;
-                        });
-                      }
-                    },
-                    child: Text("ユーザー登録"),
-                  ),
-                  const SizedBox(height: 32),
                   TextFormField(
                     decoration: InputDecoration(labelText: "メールアドレス"),
                     onChanged: (String value) {

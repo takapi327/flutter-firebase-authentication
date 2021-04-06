@@ -18,6 +18,27 @@ class AuthPage extends StatelessWidget {
           appBar: AppBar(
             title: Text('Authentication Page'),
           ),
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  child:     Text('Sign Up'),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/auth/signup');
+                  }
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  child:     Text('Log In'),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/auth/login');
+                  }
+                ),
+              ],
+            ),
+          ),
+          /*
           body: ClipRect(
             child: Stack(
               fit: StackFit.expand,
@@ -36,6 +57,7 @@ class AuthPage extends StatelessWidget {
               ],
             ),
           ),
+          */
         );
       },
     );
