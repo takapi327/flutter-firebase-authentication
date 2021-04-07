@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_firebase_authentication/auth/login.dart';
@@ -35,7 +36,40 @@ class MyApp extends StatelessWidget {
         '/auth':        (context) => AuthPage(),
         '/auth/signup': (context) => FirebaseAuthSignUp(),
         '/auth/login':  (context) => FirebaseAuthLogIn(),
-        //'/mypage':      (context) => MyPage(),
+        '/mypage':      (context) => MyPage(),
+      },
+    );
+  }
+}
+
+class AuthGuard extends StatelessWidget {
+
+  final Widget widget;
+
+  @override
+  AuthGuard(@required this.widget);
+
+  Widget build(BuildContext context) {
+    return Consumer <AuthStore>(
+      builder: (context, authStore, _) {
+        return Navigator(
+          pages: [
+            MaterialPage(
+              child: AuthPage()
+            ),
+
+            if (FirebaseAuth.instance.currentUser != null)
+              MaterialPage(
+                child: widget
+              ),
+          ],
+          onPopPage: (route, result) {
+            if (route.didPop(result)) {
+              return false;
+            }
+            return false;
+          },
+        );
       },
     );
   }
@@ -51,14 +85,23 @@ class TopPage extends StatelessWidget {
           appBar: AppBar(
             // Here we take the value from the MyHomePage object that was created by
             // the App.build method, and use it to set our appbar title.
-            title: Text('Flutter Firebase Sign up Demo Home Page'),
+            title: Text('トップページ'),
             actions: [
+              if (FirebaseAuth.instance.currentUser != null)
               IconButton(
                 icon:      Icon(Icons.account_circle_sharp),
                 onPressed: () {
-                  Navigator.pushNamed(context, '/auth');
+                  Navigator.pushNamed(context, '/mypage');
                 }
               ),
+
+              if (FirebaseAuth.instance.currentUser == null)
+                IconButton(
+                  icon:      Icon(Icons.login),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/auth');
+                  }
+                ),
             ],
           ),
           body: ClipRect(
@@ -69,7 +112,7 @@ class TopPage extends StatelessWidget {
                   padding: EdgeInsets.all(32),
                   child: Column(
                     children: [
-                      Text('test'),
+                      Text(FirebaseAuth.instance.currentUser.toString()),
                     ],
                   ),
                 ),
@@ -126,5 +169,38 @@ class TopPage extends StatelessWidget {
       ),
     );
          */
+  }
+}
+
+class MyPage extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer <AuthStore>(
+      builder: (context, authStore, _) {
+        return Scaffold(
+          appBar: AppBar(
+            // Here we take the value from the MyHomePage object that was created by
+            // the App.build method, and use it to set our appbar title.
+            title: Text('マイページ'),
+          ),
+          body: ClipRect(
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(32),
+                  child: Column(
+                    children: [
+                      Text('test'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

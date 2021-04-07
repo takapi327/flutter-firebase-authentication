@@ -42,11 +42,8 @@ class FirebaseAuthLogIn extends StatelessWidget {
                         final UserCredential result = await authStore.login();
 
                         final User user = result.user!;
-                        authStore.changeInfoText("ログインOK:${user.toString()}");
-                        authStore.authentication(user);
                         authStore.changeLoading(false);
                       } catch (e) {
-                        authStore.changeInfoText("ログインNG:${e.toString()}");
                         authStore.changeLoading(false);
                       }
                     },

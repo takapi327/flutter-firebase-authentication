@@ -5,10 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthStore extends ChangeNotifier {
   String userEmail    = "";
   String userPassword = "";
-  String infoText     = "";
   bool   isLoading    = false;
-
-  late User user;
 
   void changeLoading(bool loading) {
     isLoading = loading;
@@ -22,16 +19,6 @@ class AuthStore extends ChangeNotifier {
 
   void changePassword(String pass) {
     userPassword = pass;
-    notifyListeners();
-  }
-
-  void changeInfoText(String text) {
-    infoText = text;
-    notifyListeners();
-  }
-
-  void authentication(User user) {
-    user = user;
     notifyListeners();
   }
 
