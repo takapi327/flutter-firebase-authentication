@@ -36,7 +36,8 @@ class MyApp extends StatelessWidget {
         '/auth':        (context) => AuthPage(),
         '/auth/signup': (context) => FirebaseAuthSignUp(),
         '/auth/login':  (context) => FirebaseAuthLogIn(),
-        '/mypage':      (context) => MyPage(),
+        //'/mypage':      (context) => MyPage(),
+        '/mypage':      (context) => AuthGuard(MyPage()),
       },
     );
   }
@@ -65,9 +66,9 @@ class AuthGuard extends StatelessWidget {
           ],
           onPopPage: (route, result) {
             if (route.didPop(result)) {
-              return false;
+              return true;
             }
-            return false;
+            return true;
           },
         );
       },
@@ -192,7 +193,20 @@ class MyPage extends StatelessWidget {
                   padding: EdgeInsets.all(32),
                   child: Column(
                     children: [
-                      Text('test'),
+                      if (FirebaseAuth.instance.currentUser!.displayName != null)
+                        Text(FirebaseAuth.instance.currentUser!.displayName.toString()),
+                      Text(FirebaseAuth.instance.currentUser!.email.toString()),
+                      ElevatedButton(
+                        onPressed: () async {
+                          try {
+                            final FirebaseAuth auth = FirebaseAuth.instance;
+                            await auth.signOut();
+                          } catch (e) {
+                            print(e.toString());
+                          }
+                        },
+                        child: Text("ログアウト"),
+                      ),
                     ],
                   ),
                 ),
