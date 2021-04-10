@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
         '/auth/login':  (context) => FirebaseAuthLogIn(),
         //'/mypage':      (context) => MyPage(),
         '/mypage':      (context) => AuthGuard(MyPage()),
+        //'/register/payment': (context) => Payment()
       },
     );
   }
@@ -50,27 +51,21 @@ class AuthGuard extends StatelessWidget {
   @override
   AuthGuard(@required this.widget);
 
+  @override
   Widget build(BuildContext context) {
     return Consumer <AuthStore>(
       builder: (context, authStore, _) {
-        return Navigator(
-          pages: [
-            MaterialPage(
-              child: AuthPage()
-            ),
 
-            if (FirebaseAuth.instance.currentUser != null)
-              MaterialPage(
-                child: widget
-              ),
-          ],
-          onPopPage: (route, result) {
-            if (route.didPop(result)) {
-              return true;
-            }
-            return true;
-          },
-        );
+        void checkUser() async {
+          final currentUser = await FirebaseAuth.instance.currentUser;
+          if (currentUser == null) {
+            Navigator.pushReplacementNamed(context, '/auth');
+          }
+        }
+
+        checkUser();
+
+        return widget;
       },
     );
   }
@@ -123,53 +118,7 @@ class TopPage extends StatelessWidget {
         );
       },
     );
-        /*
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text('Flutter Firebase Sign up Demo Home Page'),
-      ),
-      body: ClipRect(
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            Container(
-              padding: EdgeInsets.all(32),
-              child: Column(
-                children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      try {
-                        setState(() {
-                          isLoading = true;
-                        });
-                        final FirebaseAuth auth = FirebaseAuth.instance;
-                        await auth.signOut();
-                        setState(() {
-                          infoText  = "ログアウト成功";
-                          isLoading = false;
-                        });
-                      } catch (e) {
-                        setState(() {
-                          infoText  = "ログアウト失敗:${e.toString()}";
-                          isLoading = false;
-                        });
-                      }
-                    },
-                    child: Text("ログアウト"),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(infoText),
-                ],
-              ),
-            ),
-            OverlayLoadingMolecules(visible: isLoading)
-          ],
-        ),
-      ),
-    );
-         */
+
   }
 }
 
