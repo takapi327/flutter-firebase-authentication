@@ -42,6 +42,8 @@ class FirebaseAuthSignUp extends StatelessWidget {
                         final UserCredential result = await authStore.signUp();
 
                         final User user = result.user!;
+                        await authStore.setUser(user);
+
                         authStore.changeLoading(false);
                       } catch (e) {
                         authStore.changeLoading(false);

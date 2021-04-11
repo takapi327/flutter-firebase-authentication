@@ -6,6 +6,7 @@ class AuthStore extends ChangeNotifier {
   String userEmail    = "";
   String userPassword = "";
   bool   isLoading    = false;
+  User?  currentUser  = FirebaseAuth.instance.currentUser;
 
   void changeLoading(bool loading) {
     isLoading = loading;
@@ -19,6 +20,11 @@ class AuthStore extends ChangeNotifier {
 
   void changePassword(String pass) {
     userPassword = pass;
+    notifyListeners();
+  }
+
+  Future<void> setUser(User? user) async {
+    currentUser = user;
     notifyListeners();
   }
 

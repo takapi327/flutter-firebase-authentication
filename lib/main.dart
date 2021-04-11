@@ -22,7 +22,6 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -36,17 +35,24 @@ class MyApp extends StatelessWidget {
         '/auth':        (context) => AuthPage(),
         '/auth/signup': (context) => FirebaseAuthSignUp(),
         '/auth/login':  (context) => FirebaseAuthLogIn(),
-        //'/mypage':      (context) => MyPage(),
-        '/mypage':      (context) => AuthGuard(MyPage()),
+        '/mypage':      (context) => MyPage(),
+        //'/mypage':      (context) => AuthGuard(MyPage()),
         //'/register/payment': (context) => Payment()
       },
     );
   }
 }
 
+/*
 class AuthGuard extends StatelessWidget {
 
   final Widget widget;
+
+  void checkUser(AuthStore authStore, BuildContext context) {
+    if (authStore.currentUser == null) {
+      Navigator.pushReplacementNamed(context, '/auth');
+    }
+  }
 
   @override
   AuthGuard(@required this.widget);
@@ -56,20 +62,14 @@ class AuthGuard extends StatelessWidget {
     return Consumer <AuthStore>(
       builder: (context, authStore, _) {
 
-        void checkUser() async {
-          final currentUser = await FirebaseAuth.instance.currentUser;
-          if (currentUser == null) {
-            Navigator.pushReplacementNamed(context, '/auth');
-          }
-        }
-
-        checkUser();
+        checkUser(authStore, context);
 
         return widget;
       },
     );
   }
 }
+ */
 
 class TopPage extends StatelessWidget {
 
@@ -79,11 +79,9 @@ class TopPage extends StatelessWidget {
       builder: (context, authStore, _) {
         return Scaffold(
           appBar: AppBar(
-            // Here we take the value from the MyHomePage object that was created by
-            // the App.build method, and use it to set our appbar title.
             title: Text('トップページ'),
             actions: [
-              if (FirebaseAuth.instance.currentUser != null)
+              if (authStore.currentUser != null)
               IconButton(
                 icon:      Icon(Icons.account_circle_sharp),
                 onPressed: () {
@@ -91,7 +89,7 @@ class TopPage extends StatelessWidget {
                 }
               ),
 
-              if (FirebaseAuth.instance.currentUser == null)
+              if (authStore.currentUser == null)
                 IconButton(
                   icon:      Icon(Icons.login),
                   onPressed: () {
@@ -108,7 +106,10 @@ class TopPage extends StatelessWidget {
                   padding: EdgeInsets.all(32),
                   child: Column(
                     children: [
-                      Text(FirebaseAuth.instance.currentUser.toString()),
+                      if (authStore.currentUser != null)
+                        Text(authStore.currentUser.toString()),
+                      if (authStore.currentUser == null)
+                        Text("未ログイン"),
                     ],
                   ),
                 ),
@@ -130,8 +131,6 @@ class MyPage extends StatelessWidget {
       builder: (context, authStore, _) {
         return Scaffold(
           appBar: AppBar(
-            // Here we take the value from the MyHomePage object that was created by
-            // the App.build method, and use it to set our appbar title.
             title: Text('マイページ'),
           ),
           body: ClipRect(
@@ -142,14 +141,15 @@ class MyPage extends StatelessWidget {
                   padding: EdgeInsets.all(32),
                   child: Column(
                     children: [
-                      if (FirebaseAuth.instance.currentUser!.displayName != null)
-                        Text(FirebaseAuth.instance.currentUser!.displayName.toString()),
-                      Text(FirebaseAuth.instance.currentUser!.email.toString()),
+                      Text(authStore.currentUser?.displayName?.toString() ?? "名前を登録していません"),
+                      Text(authStore.currentUser?.email.toString() ?? "メールアドレスを登録指定ません"),
                       ElevatedButton(
                         onPressed: () async {
                           try {
                             final FirebaseAuth auth = FirebaseAuth.instance;
                             await auth.signOut();
+                            await authStore.setUser(null);
+                            Navigator.of(context).pop();
                           } catch (e) {
                             print(e.toString());
                           }
