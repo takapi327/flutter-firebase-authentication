@@ -19,7 +19,7 @@ class ErrorDialog extends StatelessWidget {
           this.content ?? "",
         ),
         actions: <Widget>[
-          new FloatingActionButton(
+          new ElevatedButton(
             child: new Text(
               buttonText ?? "",
             ),
@@ -51,7 +51,8 @@ class ErrorDialog extends StatelessWidget {
                 Navigator.of(context).pop();
               },
             )
-          ]);
+          ]
+      );
     }
   }
 }
