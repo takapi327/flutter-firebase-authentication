@@ -35,18 +35,18 @@ class TopPage extends StatelessWidget {
 
     //step 1: add card
     PaymentMethod paymentMethod = PaymentMethod();
-    Card card = Card();
 
-    paymentMethod = await StripePayment.paymentRequestWithCardForm(
-      CardFormPaymentRequest(),
-    ).then((PaymentMethod paymentMethod) {
-      print('--------');
-      print(paymentMethod);
-      print('--------');
-      return paymentMethod;
-    }).catchError((e) {
-      print('Error Card: ${e.toString()}');
-    });
+    CreditCard _creditCard = CreditCard(
+      number:   '',
+      expMonth: 11,
+      cvc:      ''
+    );
+
+    final PaymentMethodRequest _paymentMethodRequest = PaymentMethodRequest(
+        card: _creditCard
+    );
+
+    paymentMethod = await StripePayment.createPaymentMethod(_paymentMethodRequest);
 
     paymentMethod != null
       //? processPaymentAsDirectCharge(paymentMethod)
@@ -171,6 +171,39 @@ class TopPage extends StatelessWidget {
                       if (authStore.currentUser == null)
                         Text("未ログイン"),
 
+                      TextFormField(
+                        decoration: InputDecoration(
+                            border:    OutlineInputBorder(),
+                            labelText: "Card number",
+                            hintText:  "XXXX XXXX XXXX XXXX"
+                        ),
+                        style:  TextStyle(color: Colors.black),
+                        keyboardType: TextInputType.number,
+                        textInputAction: TextInputAction.next,
+                        onChanged: (String value) {
+                          authStore.changeEmail(value);
+                        },
+                      ),
+                      SizedBox(height: 16),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          border:    OutlineInputBorder(),
+                          labelText: "Expiration Date",
+                          hintText:  "MM/YY"
+                        ),
+                        style:  TextStyle(color: Colors.black),
+                        keyboardType: TextInputType.number,
+                        textInputAction: TextInputAction.next,
+                        onChanged: (String text) {
+                          final arr = text.split('/');
+                          final month = int.tryParse(arr[0]);
+                          var year;
+                          if (arr.length == 2) {
+                            year = int.tryParse(arr[1]);
+                          }
+                        },
+                      ),
+                      SizedBox(height: 16),
                       ElevatedButton(
                         child: Text("カード登録", style: TextStyle(fontSize: 20)),
                         onPressed: () {
