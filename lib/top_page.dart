@@ -89,29 +89,14 @@ class TopPage extends StatelessWidget {
     print('amount in pence/cent which will be charged = $amount');
     //step 1: add card
     PaymentMethod paymentMethod = PaymentMethod();
-    Token token = await StripePayment.paymentRequestWithNativePay(
-      androidPayOptions: AndroidPayPaymentRequest(
-        totalPrice: (totalCost + tax + tip).toStringAsFixed(2),
-        currencyCode: 'GBP',
-      ),
-      applePayOptions: ApplePayPaymentOptions(
-        countryCode: 'GB',
-        currencyCode: 'GBP',
-        items: items,
-      ),
+    paymentMethod = await StripePayment.paymentRequestWithCardForm(
+      CardFormPaymentRequest()
     );
 
-    print('-----------');
-    print(CreditCard(token: token.tokenId));
-    print('-----------');
+    print('----------');
+    print(paymentMethod.id);
+    print('----------');
 
-    paymentMethod = await StripePayment.createPaymentMethod(
-      PaymentMethodRequest(
-        card: CreditCard(
-          token: token.tokenId,
-        ),
-      ),
-    );
     paymentMethod != null
         ? print('Success:' + paymentMethod.id) //processPaymentAsDirectCharge(paymentMethod)
         : showDialog(
@@ -171,6 +156,7 @@ class TopPage extends StatelessWidget {
                       if (authStore.currentUser == null)
                         Text("未ログイン"),
 
+                      /*
                       TextFormField(
                         decoration: InputDecoration(
                             border:    OutlineInputBorder(),
@@ -203,6 +189,7 @@ class TopPage extends StatelessWidget {
                           }
                         },
                       ),
+                       */
                       SizedBox(height: 16),
                       ElevatedButton(
                         child: Text("カード登録", style: TextStyle(fontSize: 20)),
