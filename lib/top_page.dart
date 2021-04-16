@@ -63,39 +63,27 @@ class TopPage extends StatelessWidget {
 
   Future<void> createPaymentMethodNative(BuildContext context) async {
     print('started NATIVE payment...');
-    print(PaymentMethod().id);
-    List<ApplePayItem> items = [];
-    items.add(ApplePayItem(
-      label: 'Demo Order',
-      amount: totalCost.toString(),
-    ));
-    if (tip != 0.0)
-      items.add(ApplePayItem(
-        label: 'Tip',
-        amount: tip.toString(),
-      ));
-    if (taxPercent != 0.0) {
-      tax = ((totalCost * taxPercent) * 100).ceil() / 100;
-      items.add(ApplePayItem(
-        label: 'Tax',
-        amount: tax.toString(),
-      ));
-    }
-    items.add(ApplePayItem(
-      label: 'Vendor A',
-      amount: (totalCost + tip + tax).toString(),
-    ));
-    amount = ((totalCost + tip + tax) * 100).toInt();
-    print('amount in pence/cent which will be charged = $amount');
+
     //step 1: add card
     PaymentMethod paymentMethod = PaymentMethod();
+    CardFormPaymentRequest options = CardFormPaymentRequest(
+      requiredBillingAddressFields: 'full',
+      prefilledInformation: PrefilledInformation(
+        billingAddress: BillingAddress(
+          name: 'Gunilla Haugeh',
+          line1: 'Canary Place',
+          line2: '3',
+          city: 'Macon',
+          state: 'Georgia',
+          country: 'US',
+          postalCode: '31217',
+        )
+      )
+    );
+
     paymentMethod = await StripePayment.paymentRequestWithCardForm(
       CardFormPaymentRequest()
     );
-
-    print('----------');
-    print(paymentMethod.id);
-    print('----------');
 
     paymentMethod != null
         ? print('Success:' + paymentMethod.id) //processPaymentAsDirectCharge(paymentMethod)
@@ -195,7 +183,8 @@ class TopPage extends StatelessWidget {
                         child: Text("カード登録", style: TextStyle(fontSize: 20)),
                         onPressed: () {
                           //createPaymentMethod(context);
-                          checkIfNativePayReady(context);
+                          createPaymentMethodNative(context);
+                          //checkIfNativePayReady(context);
                         },
                       ),
                       SizedBox(height: 16),
