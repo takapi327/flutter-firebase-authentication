@@ -90,107 +90,98 @@ class PaymentMethods extends StatelessWidget {
             final card = await createPaymentMethodNative(context);
             stripeStore.setCard(card);
           },
-          child: Stack(
-            children: [
-              if (stripeStore.creditCard.brand != null)
-                Container(
-                  height:  150,
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: FractionalOffset.topLeft,
-                          end:   FractionalOffset.bottomRight,
-                          colors: const [
-                            Color(0xffffffff),
-                            Color(0xffe6e6e6),
-                          ]
-                      ),
-                      //color:        Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow:    [
-                        BoxShadow(
-                          color:        Colors.black26,
-                          spreadRadius: 1.0,
-                          blurRadius:   10.0,
-                          offset:       Offset(10, 10),
-                        )
-                      ]
-                  ),
-                ),
-              if (stripeStore.creditCard.brand != null)
-                Container(
-                  alignment: Alignment.topRight,
-                  height:    150,
-                  padding:   EdgeInsets.all(8),
-                  child: Text(
-                    stripeStore.creditCard.brand.toUpperCase(),
-                    style: TextStyle(
-                        fontSize:   24,
-                        fontStyle:  FontStyle.italic,
-                        fontWeight: FontWeight.bold,
-                        color:      Colors.blue
-                    ),
-                  ),
-                ),
-
-              if (stripeStore.creditCard.brand != null)
-                Container(
-                    alignment: Alignment.centerLeft,
-                    padding:   EdgeInsets.only(left: 16),
-                    height:    150,
-                    child: Icon(
-                      Icons.credit_card,
-                      size: 40,
-                    )
-                ),
-
-              if (stripeStore.creditCard.last4 != null)
-                Container(
-                  alignment: Alignment.centerRight,
-                  padding:   EdgeInsets.only(right: 32),
-                  height:    150,
-                  child: Text(
-                    '**** **** **** ' + stripeStore.creditCard.last4.toString(),
-                    style: TextStyle(
-                        fontSize: 20,
-                        color:    Colors.black
-                    ),
-                  ),
-                ),
-              if (stripeStore.creditCard.expMonth != null)
-                Container(
-                  alignment: Alignment.bottomRight,
-                  height:    150,
-                  padding:   EdgeInsets.all(8),
-                  child: Text(
-                    cardExp(stripeStore),
-                    style: TextStyle(
-                        fontSize: 16,
-                        color:    Colors.black
-                    ),
-                  ),
-                ),
-
-              if (stripeStore.creditCard.last4 == null)
-                Container(
-                  height:  50,
-                  alignment: Alignment.center,
-                  child:   Text("カード登録", style: TextStyle(fontSize: 16)),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
+          child: stripeStore.creditCard.last4 == null
+            ? Container(
+                height:  50,
+                alignment: Alignment.center,
+                child:   Text("カード登録", style: TextStyle(fontSize: 16)),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
                       begin: FractionalOffset.topLeft,
                       end:   FractionalOffset.bottomRight,
                       colors: const [
                         Color(0xffffffff),
                         Color(0xffe6e6e6),
                       ]
-                    ),
-                    border:       Border.all(color: Colors.black12),
-                    borderRadius: BorderRadius.circular(10),
                   ),
+                  border:       Border.all(color: Colors.black12),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-            ],
-          ),
+              )
+            : Stack(
+                children: [
+                  Container(
+                    height:  150,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: FractionalOffset.topLeft,
+                            end:   FractionalOffset.bottomRight,
+                            colors: const [
+                              Color(0xffffffff),
+                              Color(0xffe6e6e6),
+                            ]
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow:    [
+                          BoxShadow(
+                            color:        Colors.black26,
+                            spreadRadius: 1.0,
+                            blurRadius:   10.0,
+                            offset:       Offset(10, 10),
+                          )
+                        ]
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.topRight,
+                    height:    150,
+                    padding:   EdgeInsets.all(8),
+                    child: Text(
+                      stripeStore.creditCard.brand.toUpperCase(),
+                      style: TextStyle(
+                          fontSize:   24,
+                          fontStyle:  FontStyle.italic,
+                          fontWeight: FontWeight.bold,
+                          color:      Colors.blue
+                      ),
+                    ),
+                  ),
+                  Container(
+                      alignment: Alignment.centerLeft,
+                      padding:   EdgeInsets.only(left: 16),
+                      height:    150,
+                      child: Icon(
+                        Icons.credit_card,
+                        size: 40,
+                      )
+                  ),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    padding:   EdgeInsets.only(right: 32),
+                    height:    150,
+                    child: Text(
+                      '**** **** **** ' + stripeStore.creditCard.last4.toString(),
+                      style: TextStyle(
+                          fontSize: 20,
+                          color:    Colors.black
+                      ),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.bottomRight,
+                    height:    150,
+                    padding:   EdgeInsets.all(8),
+                    child: Text(
+                      cardExp(stripeStore),
+                      style: TextStyle(
+                          fontSize: 16,
+                          color:    Colors.black
+                      ),
+                    ),
+                  ),
+                ],
+              )
         );
       }
     );
