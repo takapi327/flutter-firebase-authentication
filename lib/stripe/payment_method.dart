@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'dart:convert' as convert;
 import 'package:flutter_firebase_authentication/error_dialog.dart';
 import 'package:flutter_firebase_authentication/mvc/state/stripe_store.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 import './credit_card.dart';
+import './select_card.dart';
 import 'package:stripe_payment/stripe_payment.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_firebase_authentication/overlay_loading_molecules.dart';
 
 class PaymentMethods extends StatelessWidget {
 
@@ -29,7 +34,7 @@ class PaymentMethods extends StatelessWidget {
     );
 
     final PaymentMethodRequest _paymentMethodRequest = PaymentMethodRequest(
-        card: _creditCard
+      card: _creditCard
     );
 
     paymentMethod = await StripePayment.createPaymentMethod(_paymentMethodRequest);
@@ -68,6 +73,31 @@ class PaymentMethods extends StatelessWidget {
     return paymentMethod.card;
   }
 
+  Future<void> getCustomerCard(BuildContext context, StripeStore stripeStore) async {
+    print('started Get customer card...');
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      final url = Uri.http('localhost:9000', '/api/stripe/card/customer/$userId');
+      OverlayLoadingMolecules(visible: true);
+      http.Response resp = await http.get(url);
+      if (resp.statusCode == 200) {
+        var jsonResponse = convert.jsonDecode(resp.body);
+        print('-----------------');
+        print(jsonResponse);
+        print('-----------------');
+        List<CreditCard> cardList = jsonResponse;
+        stripeStore.setCardList(cardList);
+        OverlayLoadingMolecules(visible: false);
+      } else {
+        ErrorDialog(
+            title:      'Error',
+            content:    'It is not possible to pay with this card. Please try again with a different card',
+            buttonText: 'CLOSE'
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     StripePayment.setOptions(
@@ -78,10 +108,24 @@ class PaymentMethods extends StatelessWidget {
 
     return Consumer <StripeStore>(
       builder: (context, stripeStore, _) {
+        print('------------');
+        print('読み込み開始');
+        getCustomerCard(context, stripeStore);
+        print('------------');
         return GestureDetector(
           onTap: () async {
-            final card = await createPaymentMethodNative(context);
-            stripeStore.setCard(card);
+            if (stripeStore.creditCard.last4 == null) {
+              final card = await createPaymentMethodNative(context);
+              stripeStore.setCard(card);
+              stripeStore.addCardList(card);
+            } else {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return SelectCard();
+                },
+                fullscreenDialog: true
+              ));
+            }
           },
           child: stripeStore.creditCard.last4 == null
             ? Container(
