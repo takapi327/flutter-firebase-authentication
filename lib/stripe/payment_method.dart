@@ -74,25 +74,30 @@ class PaymentMethods extends StatelessWidget {
   }
 
   Future<void> getCustomerCard(BuildContext context, StripeStore stripeStore) async {
-    print('started Get customer card...');
     final userId = FirebaseAuth.instance.currentUser?.uid;
-    if (userId != null) {
+    if (userId != null && stripeStore.cardList.length == 0) {
       final url = Uri.http('localhost:9000', '/api/stripe/card/customer/$userId');
       OverlayLoadingMolecules(visible: true);
       http.Response resp = await http.get(url);
       if (resp.statusCode == 200) {
         var jsonResponse = convert.jsonDecode(resp.body);
-        print('-----------------');
-        print(jsonResponse);
-        print('-----------------');
-        List<CreditCard> cardList = jsonResponse;
+        List<CreditCard> cardList = [];
+        for (var card in jsonResponse['cardList']) {
+          cardList.add(CreditCard(
+            brand:    card['brand'],
+            expMonth: int.parse(card['exp_month']),
+            expYear:  int.parse(card['exp_year']),
+            last4:    card['last4']
+          ));
+        }
+        stripeStore.setCard(cardList.first);
         stripeStore.setCardList(cardList);
         OverlayLoadingMolecules(visible: false);
       } else {
         ErrorDialog(
-            title:      'Error',
-            content:    'It is not possible to pay with this card. Please try again with a different card',
-            buttonText: 'CLOSE'
+          title:      'Error',
+          content:    'It is not possible to pay with this card. Please try again with a different card',
+          buttonText: 'CLOSE'
         );
       }
     }
@@ -108,10 +113,7 @@ class PaymentMethods extends StatelessWidget {
 
     return Consumer <StripeStore>(
       builder: (context, stripeStore, _) {
-        print('------------');
-        print('読み込み開始');
         getCustomerCard(context, stripeStore);
-        print('------------');
         return GestureDetector(
           onTap: () async {
             if (stripeStore.creditCard.last4 == null) {

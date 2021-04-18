@@ -1,9 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:stripe_payment/stripe_payment.dart';
+import 'package:flutter_firebase_authentication/error_dialog.dart';
 import 'package:flutter_firebase_authentication/mvc/state/stripe_store.dart';
 import 'package:provider/provider.dart';
 
 class SelectCard extends StatelessWidget {
+
+  Future<CreditCard> createPaymentMethodNative(BuildContext context) async {
+    print('started NATIVE payment...');
+
+    //step 1: add card
+    PaymentMethod paymentMethod = PaymentMethod();
+
+    void setError(dynamic error) {
+      ErrorDialog(
+          title:      'Error',
+          content:    'It is not possible to pay with this card. Please try again with a different card',
+          buttonText: 'CLOSE'
+      );
+    }
+
+    paymentMethod = await StripePayment.paymentRequestWithCardForm(
+      CardFormPaymentRequest(),
+    ).catchError(setError);
+
+    return paymentMethod.card;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +56,10 @@ class SelectCard extends StatelessWidget {
               ElevatedButton(
                 child:     Text('カードを追加'),
                 onPressed: () async {
-                  print(stripeStore.cardList.length + 1);
+                  final card = await createPaymentMethodNative(context);
+                  stripeStore.setCard(card);
+                  stripeStore.addCardList(card);
+                  //print(stripeStore.cardList.length + 1);
                 },
               )
             ],

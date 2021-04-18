@@ -5,6 +5,8 @@ class StripeStore extends ChangeNotifier {
 
   CreditCard creditCard = CreditCard();
 
+  List<CreditCard> cardList = [];
+  /*
   List<CreditCard> cardList = [
     CreditCard(
       brand:    'Visa',
@@ -31,6 +33,7 @@ class StripeStore extends ChangeNotifier {
       cvc:      '327'
     ),
   ];
+   */
 
   void setCard(CreditCard card) {
     creditCard = card;
