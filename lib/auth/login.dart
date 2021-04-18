@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -26,14 +27,22 @@ class FirebaseAuthLogIn extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         TextFormField(
-                          decoration: InputDecoration(labelText: "メールアドレス"),
+                          decoration: InputDecoration(
+                            labelText: "メールアドレス",
+                            border:    OutlineInputBorder()
+                          ),
+                          keyboardType: TextInputType.emailAddress,
+                          autofocus: true,
                           onChanged: (String value) {
                             authStore.changeEmail(value);
                           },
                         ),
                         const SizedBox(height: 8),
                         TextFormField(
-                          decoration: InputDecoration(labelText: "パスワード(6文字以上)"),
+                          decoration: InputDecoration(
+                            labelText: "パスワード(6文字以上)",
+                            border:    OutlineInputBorder()
+                          ),
                           obscureText: true,
                           onChanged: (String value) {
                             authStore.changePassword(value);

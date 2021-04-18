@@ -5,6 +5,7 @@ import 'package:flutter_firebase_authentication/auth/signup.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter_firebase_authentication/mvc/state/auth_store.dart';
+import 'package:flutter_firebase_authentication/mvc/state/stripe_store.dart';
 import 'auth/auth_page.dart';
 import 'top_page.dart';
 import 'mypage.dart';
@@ -16,6 +17,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AuthStore()),
+        ChangeNotifierProvider(create: (context) => StripeStore()),
       ],
       child: MyApp(),
     ),
@@ -38,7 +40,7 @@ class MyApp extends StatelessWidget {
         '/auth/login':  (context) => FirebaseAuthLogIn(),
         '/mypage':      (context) => MyPage(),
         //'/mypage':      (context) => AuthGuard(MyPage()),
-        //'/register/payment': (context) => Payment()
+        //'/register/payment': (context) => PaymentMethods()
       },
     );
   }

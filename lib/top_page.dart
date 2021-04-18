@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter_firebase_authentication/mvc/state/auth_store.dart';
+import 'package:flutter_firebase_authentication/stripe/payment_method.dart';
 
 class TopPage extends StatelessWidget {
 
+  String text = 'Click the button to start the payment';
+
   @override
   Widget build(BuildContext context) {
+
     return Consumer <AuthStore>(
       builder: (context, authStore, _) {
         return Scaffold(
@@ -42,6 +46,10 @@ class TopPage extends StatelessWidget {
                         Text(authStore.currentUser.toString()),
                       if (authStore.currentUser == null)
                         Text("未ログイン"),
+                      SizedBox(height: 16),
+                      PaymentMethods(),
+                      SizedBox(height: 16),
+                      Text(text),
                     ],
                   ),
                 ),
