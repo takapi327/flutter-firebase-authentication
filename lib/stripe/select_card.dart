@@ -14,9 +14,9 @@ class SelectCard extends StatelessWidget {
 
     void setError(dynamic error) {
       ErrorDialog(
-          title:      'Error',
-          content:    'It is not possible to pay with this card. Please try again with a different card',
-          buttonText: 'CLOSE'
+        title:      'Error',
+        content:    'It is not possible to pay with this card. Please try again with a different card',
+        buttonText: 'CLOSE'
       );
     }
 
