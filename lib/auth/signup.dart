@@ -48,8 +48,24 @@ class FirebaseAuthSignUp extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
                   Neumorphic(
+                    style: NeumorphicStyle(
+                      boxShape: NeumorphicBoxShape.stadium(),
+                    ),
                     child: TextFormField(
-                      decoration: InputDecoration(labelText: "パスワード(6文字以上)"),
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(12.0),
+                        labelText: "パスワード(6文字以上)",
+                        prefixIcon: Icon(
+                          Icons.vpn_key_rounded,
+                          color: Colors.black54,
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                      ),
                       obscureText: true,
                       onChanged: (String value) {
                         authStore.changePassword(value);
