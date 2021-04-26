@@ -13,7 +13,14 @@ class FirebaseAuthSignUp extends StatelessWidget {
       builder: (context, authStore, _) {
         return Scaffold(
           appBar: NeumorphicAppBar(
-            title: Text('ユーザー登録'),
+            title: Text(
+              "会員登録",
+              style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: Colors.black54
+              ),
+            ),
           ),
           body: Padding(
             padding: const EdgeInsets.all(32),
@@ -24,6 +31,7 @@ class FirebaseAuthSignUp extends StatelessWidget {
                   Neumorphic(
                     style: NeumorphicStyle(
                       boxShape: NeumorphicBoxShape.stadium(),
+                      depth: -8
                     ),
                     child: TextFormField(
                       decoration: InputDecoration(
@@ -50,6 +58,7 @@ class FirebaseAuthSignUp extends StatelessWidget {
                   Neumorphic(
                     style: NeumorphicStyle(
                       boxShape: NeumorphicBoxShape.stadium(),
+                      depth: -8
                     ),
                     child: TextFormField(
                       decoration: InputDecoration(
@@ -74,7 +83,19 @@ class FirebaseAuthSignUp extends StatelessWidget {
                   ),
                   const SizedBox(height: 32),
                   NeumorphicButton(
-                    child: Text("ユーザー登録"),
+                    child: Text(
+                      "ユーザー登録",
+                      style: TextStyle(
+                        color:      Colors.blue,
+                        fontSize:   16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    padding: EdgeInsets.only(top: 16, left: 104, bottom: 16, right: 104),
+                    style: NeumorphicStyle(
+                      boxShape: NeumorphicBoxShape.stadium(),
+                      depth: 8
+                    ),
                     onPressed: () async {
                       try {
                         authStore.changeLoading(true);

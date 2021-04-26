@@ -13,7 +13,7 @@ class TwitterLogin extends StatelessWidget {
         builder: (context, authStore, _) {
           return NeumorphicButton(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   FaIcon(
@@ -30,7 +30,7 @@ class TwitterLogin extends StatelessWidget {
                   ),
                 ],
               ),
-              padding: EdgeInsets.only(top: 8, left: 24, bottom: 8, right: 24),
+              //padding: EdgeInsets.only(left: 8),
               style: NeumorphicStyle(
                 boxShape: NeumorphicBoxShape.stadium(),
               ),
