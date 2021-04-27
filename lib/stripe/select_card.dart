@@ -45,7 +45,7 @@ class SelectCard extends StatelessWidget {
             children: [
               for (var card in stripeStore.cardList)
                 RadioListTile(
-                  title:      Text('**** **** **** ' + card.last4.toString()),
+                  title:      Text(card.brand.toUpperCase() + ' 下4桁 ' + card.last4.toString()),
                   value:      card,
                   groupValue: stripeStore.creditCard,
                   onChanged:  (_) => {
