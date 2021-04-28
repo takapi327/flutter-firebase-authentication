@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:flutter_firebase_authentication/mvc/state/auth_store.dart';
 import 'package:flutter_firebase_authentication/stripe/payment_method.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 class TopPage extends StatelessWidget {
 
@@ -14,7 +15,7 @@ class TopPage extends StatelessWidget {
     return Consumer <AuthStore>(
       builder: (context, authStore, _) {
         return Scaffold(
-          appBar: AppBar(
+          appBar: NeumorphicAppBar(
             title: Text('トップページ'),
             actions: [
               if (authStore.currentUser != null)
@@ -47,7 +48,8 @@ class TopPage extends StatelessWidget {
                       if (authStore.currentUser == null)
                         Text("未ログイン"),
                       SizedBox(height: 16),
-                      PaymentMethods(),
+                      if (authStore.currentUser != null)
+                        PaymentMethods(),
                       SizedBox(height: 16),
                       Text(text),
                     ],
