@@ -31,8 +31,8 @@ class AuthStore extends ChangeNotifier {
   Future<UserCredential> signUp() {
     final  FirebaseAuth auth = FirebaseAuth.instance;
     return auth.createUserWithEmailAndPassword(
-        email:    userEmail,
-        password: userPassword
+      email:    userEmail,
+      password: userPassword
     );
   }
 
