@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_firebase_authentication/auth/login.dart';
 import 'package:flutter_firebase_authentication/auth/signup.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 import 'package:flutter_firebase_authentication/mvc/state/auth_store.dart';
 import 'package:flutter_firebase_authentication/mvc/state/stripe_store.dart';
@@ -27,11 +28,8 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return NeumorphicApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
       initialRoute: '/',
       routes: {
         '/':            (context) => TopPage(),
