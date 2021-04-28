@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_firebase_authentication/mvc/state/auth_store.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 //import 'package:flutter_firebase_authentication/overlay_loading_molecules.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import './google_login.dart';
 import './twitter_login.dart';
 import './facebook_btn.dart';
@@ -129,72 +128,6 @@ class AuthPage extends StatelessWidget {
                     }
                 ),
                 const SizedBox(height: 16),
-                /*
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    NeumorphicButton(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          NeumorphicIcon(
-                            Icons.lock,
-                            style: NeumorphicStyle(
-                                color: Colors.black54
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Text(
-                            '会員登録',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      style: NeumorphicStyle(
-                        boxShape: NeumorphicBoxShape.stadium(),
-                      ),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/auth/signup');
-                      }
-                    ),
-                    const SizedBox(width: 16),
-                    NeumorphicButton(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          NeumorphicIcon(
-                            Icons.lock,
-                            style: NeumorphicStyle(
-                                color: Colors.black54
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Text(
-                            'ログイン',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      style: NeumorphicStyle(
-                        boxShape: NeumorphicBoxShape.stadium(),
-                      ),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/auth/signup');
-                      }
-                    ),
-                  ],
-                ),
-                */
                 Text(
                   "- SNSでログイン -",
                   style: TextStyle(
